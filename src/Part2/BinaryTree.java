@@ -1,9 +1,12 @@
+package Part2;
+
 import java.util.Iterator;
 import java.util.Stack;
 
 public class BinaryTree<T> implements Iterable<T>
 {
-    public class Node<T> {
+    public class Node<T>
+    {
         T data;
         Node<T> left;
         Node<T> right;
@@ -18,75 +21,115 @@ public class BinaryTree<T> implements Iterable<T>
 
     private Node<T> root;
 
-    BinaryTree() {
+    BinaryTree()
+    {
         root = null;
     }
 
-    BinaryTree(T rootData) {
+    BinaryTree(T rootData)
+    {
         root = new Node<>(rootData);
     }
 
-    BinaryTree(T rootData, BinaryTree<T> left, BinaryTree<T> right) {
+    BinaryTree(T rootData, BinaryTree<T> left, BinaryTree<T> right
+    ) {
         root = new Node<>(rootData);
         if (left!= null){
         root.left = left.root;}
         if (right!= null){
         root.right = right.root;}
     }
-    /*BinaryTree<Integer> sampleTree = new BinaryTree<>(
-            1,
-            new BinaryTree<>(0),
-            new BinaryTree<>(2)
-    );*/
-    public interface Visitor<T> {
+
+    public interface Visitor<T>
+    {
         void visit(T data);
     }
 
-    public void inorderTraverse(Visitor<T> visitor) {
+    public void inorderTraverse(Visitor<T> visitor)
+    {
         inorderTraverse(root, visitor);
     }
 
-    private void inorderTraverse(Node<T> node, Visitor<T> visitor) {
+    private void inorderTraverse(Node<T> node, Visitor<T> visitor)
+    {
         if(node != null) {
             inorderTraverse(node.left, visitor);
             visitor.visit(node.data);
             inorderTraverse(node.right, visitor);
         }
     }
-    public Iterator<T> iterator() {
+
+    public void postorderTraverse(Visitor<T> visitor)
+    {
+        postorderTraverse(root, visitor);
+    }
+
+    private void postorderTraverse(Node<T> node, Visitor<T> visitor) {
+        if (node != null)
+        {
+            postorderTraverse(node.left, visitor);
+            postorderTraverse(node.right, visitor);
+            visitor.visit(node.data);
+        }
+    }
+
+    public void preorderTraverse(Visitor<T> visitor)
+    {
+        preorderTraverse(root, visitor);
+    }
+
+    private void preorderTraverse(Node<T> node, Visitor<T> visitor)
+    {
+        if (node != null)
+        {
+            visitor.visit(node.data);
+            preorderTraverse(node.left, visitor);
+            preorderTraverse(node.right, visitor);
+        }
+    }
+    public Iterator<T> iterator()
+    {
         return new InOrderIterator(root);
     }
-    private class InOrderIterator implements Iterator<T> {
+    private class InOrderIterator implements Iterator<T>
+    {
 
 
         Stack<Node<T>> stack = new Stack<>();
 
-        public InOrderIterator(Node<T> root) {
+        public InOrderIterator(Node<T> root)
+        {
             pushAll(root);
         }
 
-        public boolean hasNext() {
+        public boolean hasNext()
+        {
             return !stack.isEmpty();
         }
 
-        public T next() {
+        public T next()
+        {
             Node<T> node = stack.pop();
             pushAll(node.right);
             return node.data;
         }
 
-        private void pushAll(Node<T> node) {
-            while (node != null) {
+        private void pushAll(Node<T> node)
+        {
+            while (node != null)
+            {
                 stack.push(node);
                 node = node.left;
             }
         }
     }
-    public int getSize(){
+    public int getSize()
+    {
         return getSizeOfNode(root);
     }
 
-    private int getSizeOfNode(Node<T> node){
+    private int getSizeOfNode(Node<T> node)
+    {
         if (node == null) return 0;
         else return(getSizeOfNode(node.left) + 1 + getSizeOfNode(node.right));
     }
@@ -113,7 +156,8 @@ public class BinaryTree<T> implements Iterable<T>
                         new BinaryTree<>(76)
                 )
         );
-        for (Integer a : tree) {
+        for (Integer a : tree)
+        {
             System.out.println(a);
         }
 
